@@ -1,6 +1,7 @@
-package com.shf.spring.sms.task.CheckThing;
+package com.shf.spring.sms.task.CheckThing.check;
 
 import com.shf.spring.sms.task.ASTNode.AST;
+import com.shf.spring.sms.task.CheckThing.rule.CheckRule;
 import com.shf.spring.sms.task.PrintResult.Report;
 
 import java.util.ArrayList;

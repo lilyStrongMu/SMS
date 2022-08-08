@@ -1,4 +1,4 @@
-package com.shf.spring.sms.task.CheckThing;
+package com.shf.spring.sms.task.CheckThing.rule;
 
 import com.shf.spring.sms.task.ASTNode.AST;
 import com.shf.spring.sms.task.ASTNode.SqlTypes;
