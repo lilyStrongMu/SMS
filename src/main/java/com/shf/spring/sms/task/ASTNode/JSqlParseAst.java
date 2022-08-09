@@ -2,11 +2,20 @@ package com.shf.spring.sms.task.ASTNode;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.*;
 
 import java.util.List;
 
 public class JSqlParseAst implements AST{
+    private Statement statement;
+    private String sql;
+
+    public JSqlParseAst(Statement statement, String sql) {
+        this.statement = statement;
+        this.sql = sql;
+    }
+
     @Override
     public SqlTypes getSqlType() {
         return null;
