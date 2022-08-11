@@ -90,6 +90,12 @@ public class JSqlParseAst implements AST{
     @Override
     public List<Column> getColumns() {
         switch (this.getSqlType()) {
+            case REPLACE:
+                Replace replace = (Replace) statement;
+                return replace.getColumns();
+            case UPDATE:
+                Update update = (Update) statement;
+                return update.getColumns();
             case INSERT:
                 Insert insert = (Insert) statement;
                 return insert.getColumns();
@@ -104,6 +110,12 @@ public class JSqlParseAst implements AST{
             case SELECT:
                 Select select = (Select) statement;
                 return ((PlainSelect) select.getSelectBody()).getJoins();
+            case DELETE:
+                Delete delete = (Delete) statement;
+                return delete.getJoins();
+            case UPDATE:
+                Update update = (Update) statement;
+                return update.getJoins();
             default:
                 return null;
         }
@@ -111,21 +123,35 @@ public class JSqlParseAst implements AST{
 
     @Override
     public Limit getLimit() {
-        if (SqlTypes.SELECT == getSqlType()) {
-            Select select = (Select) statement;
-            return ((PlainSelect) select.getSelectBody()).getLimit();
-        } else {
-            return null;
+        switch (this.getSqlType()) {
+            case SELECT:
+                Select select = (Select) statement;
+                return ((PlainSelect) select.getSelectBody()).getLimit();
+            case DELETE:
+                Delete delete = (Delete) statement;
+                return delete.getLimit();
+            case UPDATE:
+                Update update = (Update) statement;
+                return update.getLimit();
+            default:
+                return null;
         }
     }
 
     @Override
     public List<OrderByElement> getOrderByElement() {
-        if (SqlTypes.SELECT == getSqlType()) {
-            Select select = (Select) statement;
-            return ((PlainSelect) select.getSelectBody()).getOrderByElements();
-        } else {
-            return null;
+        switch (this.getSqlType()) {
+            case SELECT:
+                Select select = (Select) statement;
+                return ((PlainSelect) select.getSelectBody()).getOrderByElements();
+            case DELETE:
+                Delete delete = (Delete) statement;
+                return delete.getOrderByElements();
+            case UPDATE:
+                Update update = (Update) statement;
+                return update.getOrderByElements();
+            default:
+                return null;
         }
     }
 }

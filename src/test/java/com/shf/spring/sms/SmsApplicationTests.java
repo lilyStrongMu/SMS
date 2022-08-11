@@ -6,7 +6,11 @@ import com.shf.spring.sms.task.ASTNode.SqlTypes;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.Join;
+import net.sf.jsqlparser.statement.select.Limit;
+import net.sf.jsqlparser.statement.select.OrderByElement;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 
 //@SpringBootTest
@@ -36,7 +42,7 @@ public class SmsApplicationTests implements ApplicationContextAware {
 
 
 
-    String sql = "SELECT a1, a2 FROM t1 AS a1 INNER JOIN t2 AS a2 WHERE a1.id=a2.id";
+    String sql = "INSERT INTO Websites (name, url, alexa, country) VALUES ('百度','https://www.baidu.com/','4','CN');" ;
     Statement statement;
     {
         try {
@@ -51,12 +57,12 @@ public class SmsApplicationTests implements ApplicationContextAware {
     @Test
     public void testJsqlparser() {
         String s = jSqlParseAstt.getSql();
-
         SqlTypes sqlTypes = jSqlParseAstt.getSqlType();
-
-        Expression expr = jSqlParseAstt.getWhere();
-        System.out.println(expr);
+        List<Column> co = jSqlParseAstt.getColumns();
+        //OrderByElement obe = jSqlParseAstt.getOrderByElement();
+        System.out.println(co);
     }
+
 
 }
 
