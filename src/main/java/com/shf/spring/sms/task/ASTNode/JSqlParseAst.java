@@ -54,6 +54,17 @@ public class JSqlParseAst implements AST{
         }
     }
 
+//    @Override
+//    public List<SelectItem> nest_getSelects() {
+//        switch (this.getSqlType()) {
+//            case SELECT:
+//                Select select = (Select) statement;
+//                return ((PlainSelect) select.getSelectBody()).getSelectItems();
+//            default:
+//                return null;
+//        }
+//    }
+
     @Override
     public List<Column> getColumns() {
         return null;

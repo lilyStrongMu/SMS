@@ -6,8 +6,7 @@ package com.shf.spring.sms.task.CheckThing.check;
 
 public class SelectChecker extends Checker {
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "SELECT";
     }
 }
