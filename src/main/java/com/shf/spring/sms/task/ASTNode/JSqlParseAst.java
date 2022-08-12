@@ -24,7 +24,9 @@ public class JSqlParseAst implements AST{
 
     @Override
     public SqlTypes getSqlType() {
-        if (statement instanceof Select) {
+         if(statement instanceof SubSelect) {
+            return SqlTypes.SUBSELECT;
+        } else if (statement instanceof Select) {
             return SqlTypes.SELECT;
         } else if (statement instanceof Update) {
             return SqlTypes.UPDATE;
@@ -36,8 +38,7 @@ public class JSqlParseAst implements AST{
             return SqlTypes.REPLACE;
         } else if(statement instanceof GrammarErrStatement){
             return SqlTypes.ERROR;
-        }
-        else {
+        }else {
             return SqlTypes.OTHER;
         }
     }
@@ -154,5 +155,17 @@ public class JSqlParseAst implements AST{
                 return null;
         }
     }
+    public int getNestedLayers(){
+       int n = sql.length();
+       int res = 0;
+       char[] cs = sql.toCharArray();
+       for (int i = 0; i<n ; i++){
+           if(cs[i] == '(' && cs[i+1]=='S'){
+               res ++;
+           }
+       }
+       return res;
+    }
+
 }
 

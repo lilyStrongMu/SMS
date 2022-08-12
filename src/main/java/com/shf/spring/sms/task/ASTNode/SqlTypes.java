@@ -7,7 +7,8 @@ public enum SqlTypes {
     REPLACE("replace"),
     INSERT("insert"),
     ERROR("error"),
-    OTHER("error"),
+    OTHER("other"),
+    SUBSELECT("SubSelect"),
     ;
 
     private final String value;

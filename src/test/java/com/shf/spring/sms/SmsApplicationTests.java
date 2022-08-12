@@ -42,7 +42,7 @@ public class SmsApplicationTests implements ApplicationContextAware {
 
 
 
-    String sql = "INSERT INTO Websites (name, url, alexa, country) VALUES ('百度','https://www.baidu.com/','4','CN');" ;
+    String sql = "SELECT * FROM A,(SELECT * FROM (SELECT * FROM C) C) B" ;
     Statement statement;
     {
         try {
@@ -58,9 +58,11 @@ public class SmsApplicationTests implements ApplicationContextAware {
     public void testJsqlparser() {
         String s = jSqlParseAstt.getSql();
         SqlTypes sqlTypes = jSqlParseAstt.getSqlType();
-        List<Column> co = jSqlParseAstt.getColumns();
-        //OrderByElement obe = jSqlParseAstt.getOrderByElement();
-        System.out.println(co);
+        int n = jSqlParseAstt.getNestedLayers();
+        //List<Column> co = jSqlParseAstt.getColumns();
+        //Limit li = jSqlParseAstt.getLimit();
+        //System.out.println(co);
+        System.out.println(n);
     }
 
 
