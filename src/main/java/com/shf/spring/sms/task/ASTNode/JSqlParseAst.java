@@ -24,9 +24,7 @@ public class JSqlParseAst implements AST{
 
     @Override
     public SqlTypes getSqlType() {
-         if(statement instanceof SubSelect) {
-            return SqlTypes.SUBSELECT;
-        } else if (statement instanceof Select) {
+        if (statement instanceof Select) {
             return SqlTypes.SELECT;
         } else if (statement instanceof Update) {
             return SqlTypes.UPDATE;
@@ -38,7 +36,8 @@ public class JSqlParseAst implements AST{
             return SqlTypes.REPLACE;
         } else if(statement instanceof GrammarErrStatement){
             return SqlTypes.ERROR;
-        }else {
+        }
+        else {
             return SqlTypes.OTHER;
         }
     }
@@ -91,12 +90,6 @@ public class JSqlParseAst implements AST{
     @Override
     public List<Column> getColumns() {
         switch (this.getSqlType()) {
-            case REPLACE:
-                Replace replace = (Replace) statement;
-                return replace.getColumns();
-            case UPDATE:
-                Update update = (Update) statement;
-                return update.getColumns();
             case INSERT:
                 Insert insert = (Insert) statement;
                 return insert.getColumns();
@@ -111,12 +104,6 @@ public class JSqlParseAst implements AST{
             case SELECT:
                 Select select = (Select) statement;
                 return ((PlainSelect) select.getSelectBody()).getJoins();
-            case DELETE:
-                Delete delete = (Delete) statement;
-                return delete.getJoins();
-            case UPDATE:
-                Update update = (Update) statement;
-                return update.getJoins();
             default:
                 return null;
         }
@@ -124,48 +111,22 @@ public class JSqlParseAst implements AST{
 
     @Override
     public Limit getLimit() {
-        switch (this.getSqlType()) {
-            case SELECT:
-                Select select = (Select) statement;
-                return ((PlainSelect) select.getSelectBody()).getLimit();
-            case DELETE:
-                Delete delete = (Delete) statement;
-                return delete.getLimit();
-            case UPDATE:
-                Update update = (Update) statement;
-                return update.getLimit();
-            default:
-                return null;
+        if (SqlTypes.SELECT == getSqlType()) {
+            Select select = (Select) statement;
+            return ((PlainSelect) select.getSelectBody()).getLimit();
+        } else {
+            return null;
         }
     }
 
     @Override
     public List<OrderByElement> getOrderByElement() {
-        switch (this.getSqlType()) {
-            case SELECT:
-                Select select = (Select) statement;
-                return ((PlainSelect) select.getSelectBody()).getOrderByElements();
-            case DELETE:
-                Delete delete = (Delete) statement;
-                return delete.getOrderByElements();
-            case UPDATE:
-                Update update = (Update) statement;
-                return update.getOrderByElements();
-            default:
-                return null;
+        if (SqlTypes.SELECT == getSqlType()) {
+            Select select = (Select) statement;
+            return ((PlainSelect) select.getSelectBody()).getOrderByElements();
+        } else {
+            return null;
         }
     }
-    public int getNestedLayers(){
-       int n = sql.length();
-       int res = 0;
-       char[] cs = sql.toCharArray();
-       for (int i = 0; i<n ; i++){
-           if(cs[i] == '(' && cs[i+1]=='S'){
-               res ++;
-           }
-       }
-       return res;
-    }
-
 }
 

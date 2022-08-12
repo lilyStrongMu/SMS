@@ -25,10 +25,6 @@ public interface AST {
 
     List<OrderByElement> getOrderByElement();
 
-    int getNestedLayers();
-
-
-
 
 
 }
