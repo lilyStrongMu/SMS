@@ -1,13 +1,14 @@
 package com.shf.spring.sms.task.ASTNode;
 
 public enum SqlTypes {
+    SUBSELECT("subselect"),
     SELECT("select"),
     DELETE("delete"),
     UPDATE("update"),
     REPLACE("replace"),
     INSERT("insert"),
     ERROR("error"),
-    OTHER("error"),
+    OTHER("Other"),
     ;
 
     private final String value;
