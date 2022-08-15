@@ -75,9 +75,9 @@ public class WriteClearlySelectFieldRule implements CheckRule {
             List<String> newlist = Arrays.asList(new_list.split(" "));
             // 1. 查询嵌套体中是否有*号
             if (checknestAsterisk(newlist)) {
-                System.out.println("system: 嵌套体内字段名请写明查询字段，嵌套体内不要使用select *");
+                System.out.println("system: 嵌套体内字段名请写明查询字段，嵌套体内不要使用 ‘select *’");
 //                report.setDesc("请写明查询字段，不要使用select *");
-                //11
+//11
                 report.setPass(false);
                 report.setLevel(Report.Level.ERROR);
                 return report;
@@ -85,9 +85,9 @@ public class WriteClearlySelectFieldRule implements CheckRule {
         }
         // 2. 查询一般体中是否有*号
         else if (checkAsterisk(selectItems)) {
-            System.out.println("system: 请写明查询字段，不要使用select *");
+            System.out.println("system: 请写明查询字段，不要使用 ‘select *’");
 //            report.setDesc("请写明查询字段，不要使用select *");
-            //1
+// 1
             report.setPass(false);
             report.setLevel(Report.Level.ERROR);
             return report;
