@@ -68,7 +68,7 @@ public class WriteClearlySelectFieldRule implements CheckRule {
 
         List<SelectItem> selectItems = tree.getSelects();
 
-        String[] num_Strings = report.sql.split("select");
+        String[] num_Strings = report.sql.toLowerCase().split("select");
         if (num_Strings.length - 1 > 1) {
             int lastIndex = report.sql.lastIndexOf("select");
             String new_list = report.sql.substring(lastIndex + 1);

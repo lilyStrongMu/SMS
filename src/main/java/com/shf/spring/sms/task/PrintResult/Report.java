@@ -27,6 +27,10 @@ public class Report {
         this.level = level;
     }
 
+    public boolean isPass() {
+        return pass;
+    }
+
     public enum Level{
         WARNING("wanring"),
         ERROR("error"),
