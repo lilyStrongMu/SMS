@@ -3,6 +3,8 @@ package com.shf.spring.sms;
 
 import com.shf.spring.sms.task.ASTNode.JSqlParseAst;
 import com.shf.spring.sms.task.ASTNode.SqlTypes;
+import com.shf.spring.sms.task.PrintResult.DefaultAppender;
+import com.shf.spring.sms.task.PrintResult.Report;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -20,6 +22,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,7 +45,8 @@ public class SmsApplicationTests implements ApplicationContextAware {
 
 
 
-    String sql = "SELECT * FROM A,(SELECT * FROM (SELECT * FROM C) C) B" ;
+    String sql = "select * from(select E from (select D from (select * from (select C from (select B from A))))) as a where name = 'sql' " ;
+    //SELECT * FROM A,(SELECT * FROM B) B, (SELECT * FROM C) C
     Statement statement;
     {
         try {
@@ -64,6 +68,24 @@ public class SmsApplicationTests implements ApplicationContextAware {
         //System.out.println(co);
         System.out.println(n);
     }
+
+
+
+
+
+
+    @Autowired
+    private DefaultAppender defaultAppender= new DefaultAppender();
+
+    @Test
+    public void testprintresult(){
+        List<Report> result = new ArrayList<Report>();
+        Report report = new Report(false,"请写明查询字段，不要使用select *","select * from test", Report.Level.ERROR,"null");
+        result.add(report);
+        defaultAppender.print(result);
+
+    }
+
 
 
 }

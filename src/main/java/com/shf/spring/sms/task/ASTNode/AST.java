@@ -2,6 +2,7 @@ package com.shf.spring.sms.task.ASTNode;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.*;
 
 import java.util.List;
@@ -24,6 +25,12 @@ public interface AST {
     Limit getLimit();
 
     List<OrderByElement> getOrderByElement();
+
+    List<String> getTable();
+
+    Distinct getDistinct();
+
+    int getNestedLayers();
 
 
 
