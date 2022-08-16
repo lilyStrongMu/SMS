@@ -6,6 +6,7 @@ import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AST {
     SqlTypes getSqlType();
@@ -32,6 +33,5 @@ public interface AST {
 
     int getNestedLayers();
 
-
-
+    Map Items_Tables();
 }
