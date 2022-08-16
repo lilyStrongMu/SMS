@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>规则检查</title>
+    <div th:replace="common/common :: copy"></div>
+
+</head>
+
+<body>
+    <div>
+        <span>1.&nbsp;select id,name,sex, birthday, tel from gaoli_test &nbsp; &nbsp;<button type="submit" class="btn btn-success radius size-MINI" onclick="selectAll0()">&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;</button></span>
+    </div>
+
+    <div>
+        <span>2. &nbsp;select * from gaoli_test &nbsp; &nbsp;<button type="submit" class="btn btn-success radius size-MINI" onclick="selectAll1()">&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;</button></span>
+    </div>
+    <div>
+        <span>3. &nbsp;select name, sex from gaoli_test order by name,sex &nbsp; &nbsp;<button type="submit" class="btn btn-success radius size-MINI" onclick="selectIndex0()">&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;</button></span>
+    </div>
+    <div>
+        <span>4. &nbsp;select name, sex from gaoli_test order by name &nbsp; &nbsp;<button type="submit" class="btn btn-success radius size-MINI" onclick="selectIndex1()">&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;</button></span>
+    </div>
+    <div>
+        <span>5.&nbsp;select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t,
+            course e &nbsp; &nbsp; <button type="submit" class="btn btn-success radius size-MINI" onclick="selectLayer()">&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;</button></span>
+    </div>
+    <div>
+        <span>6.&nbsp;DELETE from gaoli_test where id = 6 &nbsp; &nbsp; <button type="submit" class="btn btn-success radius size-MINI" onclick="delete0()">&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;</button></span>
+    </div>
+
+    <div>
+        <span>7.&nbsp;delete from gaoli_test where id > 1 &nbsp; &nbsp; <button type="submit" class="btn btn-success radius size-MINI" onclick="delete1()">&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;</button></span>
+    </div>
+    <script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/datatables/1.10.15/jquery.dataTables.min.js}"></script>
+    <script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}"></script>
+    <script th:inline="javascript">
+        function selectAll0() {
+            $.ajax({
+                url: '/sqlTest/selectCheck/0/0',
+                type: 'Get',
+                dataType: 'json',
+            })
+            alert("提交成功")
+        }
+        function selectAll1() {
+            $.ajax({
+                url: '/sqlTest/selectCheck/0/1',
+                type: 'Get',
+            })
+            alert("提交成功")
+        }
+        function selectIndex0() {
+            $.ajax({
+                url: '/sqlTest/selectCheck/1/0',
+                type: 'Get',
+            })
+            alert("提交成功")
+        }
+
+        function selectIndex1() {
+            $.ajax({
+                url: '/sqlTest/selectCheck/1/1',
+                type: 'Get',
+            })
+            alert("提交成功")
+        }
+
+        function selectLayer() {
+            $.ajax({
+                url: '/sqlTest/selectCheck/2',
+                type: 'Get',
+            })
+            alert("提交成功")
+        }
+
+        function delete0() {
+            $.ajax({
+                url: '/sqlTest/deleteWhereCheck/0',
+                type: 'Get',
+            })
+            alert("提交成功")
+        }
+
+        function delete1() {
+            $.ajax({
+                url: '/sqlTest/deleteWhereCheck/1',
+                type: 'Get',
+            })
+            alert("提交成功")
+        }
+    </script>
+</body>
+</html>

@@ -51,6 +51,14 @@
 </header>
 <aside class="Hui-aside">
     <div th:if="${session.USER.type==2}" class="menu_dropdown bk_2">
+        <dl id="menu-sqlTest">
+            <dt><i class="Hui-iconfont">&#xe613;</i> sql规则检查<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a th:data-href="@{/sqlTest/getPage}" data-title="规则列表" href="javascript:void(0)">规则列表</a></li>
+                </ul>
+            </dd>
+        </dl>
         <dl id="menu-article">
             <dt><i class="Hui-iconfont">&#xe616;</i> 教室管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
@@ -158,6 +166,7 @@
                 </ul>
             </dd>
         </dl>
+
     </div>
 </aside>
 <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a>
