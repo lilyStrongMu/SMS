@@ -1,9 +1,7 @@
 package com.shf.spring.sms.task.ASTNode;
 
-import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
@@ -15,6 +13,8 @@ import net.sf.jsqlparser.util.TablesNamesFinder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.shf.spring.sms.task.ASTNode.SqlTypes.SELECT;
 
 
 public class JSqlParseAst implements AST{
@@ -29,7 +29,7 @@ public class JSqlParseAst implements AST{
     @Override
     public SqlTypes getSqlType() {
         if (statement instanceof Select) {
-            return SqlTypes.SELECT;
+            return SELECT;
         } else if (statement instanceof Update) {
             return SqlTypes.UPDATE;
         } else if (statement instanceof Delete) {
@@ -209,6 +209,48 @@ public class JSqlParseAst implements AST{
     }
 
 
+    //单表查询可以直接获得
+    //多表查询包括多种，不考虑Union和子查询，剩下的多表方式就是join
+    @Override
+    public Map Items_Tables(){
+        Map<String, String> map = new HashMap<String, String>();
+        if (this.getSqlType() == SELECT){
+            //单表查询
+            if (getJoins() == null){
+                List<SelectItem> Items = this.getSelects();
+                List<String> tables = this.getTable();
+                String table = (String) tables.get(0);
+                for (SelectItem Item :Items){
+                    String stringItem = String.valueOf(Item);
+                    if (stringItem.indexOf("(") != -1){
+                        String stringItem_delete = stringItem.substring(stringItem.indexOf("(")+1,stringItem.indexOf(")"));
+                        map.put(stringItem_delete,table);
+                    }else  map.put(stringItem,table);
+                }
+
+            }
+
+            if (getJoins() != null){
+                List<SelectItem> Items = this.getSelects();
+                for (SelectItem Item :Items){
+                    String Stringitem = String.valueOf(Item);
+                    String[] Stringitem_split = Stringitem.split("\\.");
+//                    for (String s:Stringitem_split){
+//                        System.out.println(s);
+//                    }
+
+                    map.put(Stringitem_split[1],Stringitem_split[0]);
+                }
+
+            }
+
+
+        }else return null;
+
+
+        return map;
+    }
+
     private static Map test_select_subselect(SelectBody selectBody){
         Map<String, String> map = new HashMap<String, String>();
 
@@ -239,5 +281,9 @@ public class JSqlParseAst implements AST{
         }
         return map;
     }
+
+
+
+
 }
 
