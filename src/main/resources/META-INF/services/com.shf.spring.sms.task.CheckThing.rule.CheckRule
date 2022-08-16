@@ -1,1 +1,4 @@
 com.shf.spring.sms.task.CheckThing.rule.DeleteWhereCheck
+com.shf.spring.sms.task.CheckThing.rule.SelectIndexCheck
+com.shf.spring.sms.task.CheckThing.rule.WriteClearlySelectFieldRule
+com.shf.spring.sms.task.CheckThing.rule.NestLayerCheck_v2

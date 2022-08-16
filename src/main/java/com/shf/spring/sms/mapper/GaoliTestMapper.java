@@ -18,4 +18,6 @@ public interface GaoliTestMapper extends BaseMapper<GaoliTest> {
     GaoliTest selectIndex2();
 
     List<Map<String, String>> selectLayer1();
+
+    void deleteWhere();
 }

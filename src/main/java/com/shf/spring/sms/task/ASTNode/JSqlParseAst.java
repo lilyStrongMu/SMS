@@ -96,24 +96,20 @@ public class JSqlParseAst implements AST{
 
     @Override
     public GroupByElement getGroupBy() {
-            switch (this.getSqlType()) {
-                case SELECT:
-                    Select select = (Select) statement;
-                    return  ((PlainSelect) select.getSelectBody()).getGroupBy();
-                default:
-                    return null;
-            }
+        if (this.getSqlType() == SELECT) {
+            Select select = (Select) statement;
+            return ((PlainSelect) select.getSelectBody()).getGroupBy();
+        }
+        return null;
     }
 
     @Override
     public List<SelectItem> getSelects() {
-            switch (this.getSqlType()) {
-                case SELECT:
-                    Select select = (Select) statement;
-                    return ((PlainSelect) select.getSelectBody()).getSelectItems();
-                default:
-                    return null;
-            }
+        if (this.getSqlType() == SELECT) {
+            Select select = (Select) statement;
+            return ((PlainSelect) select.getSelectBody()).getSelectItems();
+        }
+        return null;
     }
 
     @Override
@@ -275,10 +271,10 @@ public class JSqlParseAst implements AST{
             if (fromItem instanceof SubSelect) {
                 map.put("fromItemSubselect", fromItem.toString());
             }
-
-        } else if (selectBody instanceof WithItem) {
-            test_select_subselect(((WithItem) selectBody).getSelectBody());
         }
+//        } else if (selectBody instanceof WithItem) {
+//            test_select_subselect(((WithItem) selectBody).getSelectBody());
+//        }
         return map;
     }
 

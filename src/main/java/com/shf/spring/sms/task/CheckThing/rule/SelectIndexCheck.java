@@ -11,10 +11,7 @@ import net.sf.jsqlparser.util.TablesNamesFinder;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class SelectIndexCheck implements CheckRule{
@@ -128,7 +125,7 @@ public class SelectIndexCheck implements CheckRule{
 
     @Override
     public List<SqlTypes> scope() {
-        return null;
+        return Arrays.asList(SqlTypes.SELECT);
     }
 
     private boolean isHere(List<Set<String>> indexs, List<String> items){

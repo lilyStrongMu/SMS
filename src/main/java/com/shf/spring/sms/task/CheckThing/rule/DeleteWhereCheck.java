@@ -34,18 +34,17 @@ public class DeleteWhereCheck implements CheckRule{
             report.setPass(false);
         }else{
             String sql = tree.getSql();
-            String tableName = tree.getTableName().get(0);
+            String tableName = tree.getTable().get(0);
             String indexSql = "select index_column_name from table_index where table_name = '"+tableName+"'";
-            String[] index = jdbcTemplate.queryForObject(indexSql, String[].class);
+            List<String> index = jdbcTemplate.queryForList(indexSql, String.class);
             String countSql = "select count(%s) from %s";
-            assert index != null;
-            Integer count1 = jdbcTemplate.queryForObject(String.format(countSql, index[0], tableName), Integer.class);
+            Integer count1 = jdbcTemplate.queryForObject(String.format(countSql, index.get(0), tableName), Integer.class);
             assert count1 != null;
             if(count1 == 1){
                 return report;
             }
             String realSql = "select count(%s) from %s where %s";
-            String realSql2 = String.format(realSql, index[0], tableName, expressionsWhere);
+            String realSql2 = String.format(realSql, index.get(0), tableName, expressionsWhere);
 
             Integer count2 = jdbcTemplate.queryForObject(realSql2,Integer.class);
             if(count1.equals(count2)){

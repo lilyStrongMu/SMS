@@ -28,17 +28,21 @@ public class NestLayerCheck_v2 implements CheckRule{
         // 记录深度
         int deep = 0;
         // 左括号的位置记录
-        if (report.sql == null)
-            return report;
+        report.setSql(tree.getSql());
         List<Integer> alldeep = new ArrayList<>();
-
+        List<String> names = tree.getTable();
+        if(names != null && names.size() > 4){
+            report.setPass(false);
+            report.setLevel(Report.Level.ERROR);
+            report.setDesc("查询的表的个数不超过5个.");
+        }
         char[] chararray = report.sql.toCharArray();
-        for (int i = 0; i< chararray.length; i++){
+        for (char c : chararray) {
             // 找到 ( 就加1
-            if (chararray[i] == '(')
+            if (c == '(')
                 deep++;
             // 找到 ) 就减1
-            if (chararray[i] == ')')
+            if (c == ')')
                 deep--;
             // 记录出现过的深度
             alldeep.add(deep);
@@ -56,13 +60,14 @@ public class NestLayerCheck_v2 implements CheckRule{
             //查询嵌套体中是否有*号
 //            if (checknestAsterisk(newlist)) {
         if(maxdeep > 4){
-            System.out.printf("system: 检测到 ‘from’ 多层嵌套有 %d 层，嵌套语句查询层次不得超过 5 层", maxdeep + 1);
-//                report.setDesc("请写明查询字段，不要使用select *");
-//            11
+            //System.out.printf("system: 检测到 ‘from’ 多层嵌套有 %d 层，嵌套语句查询层次不得超过 5 层", maxdeep + 1);
+
             report.setPass(false);
             report.setLevel(Report.Level.ERROR);
-            return report;
+
+            report.setDesc((report.getDesc() == null ? "": report.getDesc())+"嵌套语句查询层次不得超过 5 层");
         }
+
         return report;
     }
 //        //查询一般体中是否有*号
@@ -101,25 +106,7 @@ public class NestLayerCheck_v2 implements CheckRule{
 //        return report;
 
     // 一般结构，检查提取到的语句语法
-    private boolean checkAsterisk(List<SelectItem> selectItems) {
 
-        if (selectItems.toString().contains("*")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    // 嵌套结构，检查提取到的语句语法
-    private boolean checknestAsterisk(List<String> newlist) {
-
-
-
-        if (newlist.contains("*")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     @Override
     public List<SqlTypes> scope() {

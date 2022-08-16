@@ -27,13 +27,13 @@ public class SqlTestController {
     @GetMapping("/deleteWhereCheck/{type}")
     @ResponseBody
     public void deleteWhereCheck(@PathVariable int type){
-        System.out.println("come");
+        //System.out.println("come");
         try{
             if(type == 0){
                 mapper.deleteById(7);
             }
             if(type == 1){
-                mapper.deleteById(null);
+                mapper.deleteWhere();
             }
             log.info("success");
         }catch (Exception e){

@@ -1,7 +1,9 @@
 package com.shf.spring.sms.task.PrintResult;
 
+import lombok.Data;
 import net.sf.jsqlparser.statement.Statement;
 
+@Data
 public class Report {
     public boolean pass; //通过标识
     public String desc; //错误提示
@@ -10,10 +12,13 @@ public class Report {
     public String sample;//正例，每个报告在输出时，除了报告错误外，还需展示正例，告诉用户正确的写法是什么
 
     public boolean isPass() {
-        if(pass){
-            return true;
-        }
-        else return false;
+        return pass;
+    }
+    public Report(){
+
+    }
+    public Report(String sql){
+        this.sql = sql;
     }
     public Report(boolean pass,String desc, String sql,Level level,String sample) {
         this.pass = pass;

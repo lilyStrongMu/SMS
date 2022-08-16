@@ -132,12 +132,15 @@ public class WriteClearlySelectFieldRule implements CheckRule {
 
     // 一般结构，检查提取到的语句语法
     private boolean checkAsterisk(List<SelectItem> selectItems) {
-
-        if (selectItems.toString().contains("*")) {
+        if(selectItems == null || selectItems.size()==0){
             return true;
-        } else {
-            return false;
         }
+        for(SelectItem item : selectItems){
+            if(item.toString().contains("*")){
+                return true;
+            }
+        }
+        return false;
     }
     // 嵌套结构，检查提取到的语句语法
     private boolean checknestAsterisk(List<String> newlist) {
@@ -147,11 +150,7 @@ public class WriteClearlySelectFieldRule implements CheckRule {
 //            int lastIndex = report.sql.lastIndexOf("select");
 //            String new_list = report.sql.substring(lastIndex + 1);
 
-        if (newlist.contains("*")) {
-            return true;
-        } else {
-            return false;
-        }
+        return newlist.contains("*");
     }
 
 

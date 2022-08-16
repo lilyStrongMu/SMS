@@ -3,10 +3,17 @@ package com.shf.spring.sms.Interceptor;
 import com.shf.spring.sms.services.impl.SaveSqlImpl;
 import com.shf.spring.sms.services.inter.SaveSql;
 import com.shf.spring.sms.task.ASTNode.AST;
+import com.shf.spring.sms.task.ASTNode.Analyzer;
+import com.shf.spring.sms.task.ASTNode.JSqlParseAnalyzer;
 import com.shf.spring.sms.task.ASTNode.JSqlParseAst;
+import com.shf.spring.sms.task.CheckThing.check.Checker;
+import com.shf.spring.sms.task.CheckThing.holder.AutoHolder;
+import com.shf.spring.sms.task.CheckThing.holder.CheckerHolder;
 import com.shf.spring.sms.task.CheckThing.rule.CheckRule;
 import com.shf.spring.sms.task.CheckThing.rule.DeleteWhereCheck;
 import com.shf.spring.sms.task.CheckThing.rule.WriteClearlySelectFieldRule;
+import com.shf.spring.sms.task.PrintResult.Appender;
+import com.shf.spring.sms.task.PrintResult.DefaultAppender;
 import com.shf.spring.sms.task.PrintResult.Report;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -20,13 +27,15 @@ import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
+import org.apache.ibatis.session.ResultHandler;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Proxy;
 import java.sql.Statement;
+import java.util.List;
 
 @Intercepts({
-        @Signature(type = StatementHandler.class, method = "select", args = {Statement.class})
+        @Signature(type = StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class})
 })
 @Component
 @Slf4j
@@ -60,18 +69,27 @@ public class MybatisSelectInceptor implements Interceptor {
                 String sqlString=sql.substring(index+1, length);
                 if(sqlString.contains("select") || sqlString.contains("SELECT")){
                     SaveSql saveSql = new SaveSqlImpl();
-                    saveSql.saveSql(sqlString, 4);
+                    saveSql.saveSql(sqlString, 2);
                 }
-                net.sf.jsqlparser.statement.Statement statement2 = CCJSqlParserUtil.parse(sqlString);
-                AST astNode = new JSqlParseAst(statement2,sql);
-                CheckRule checkRule = new WriteClearlySelectFieldRule();
-                Report report= checkRule.match(astNode);
-                if(!report.isPass()){
-                    System.out.println("wrong");
+                Analyzer analyzer = new JSqlParseAnalyzer();
+                AST tree = analyzer.analyze(sqlString);
+                AutoHolder holder = new AutoHolder();
+                Appender appender = new DefaultAppender();
+                //遍历规则检查器，开始检查
+                for (Checker checker : CheckerHolder.getCheckers().values()){
+                    if(!"select".equals(checker.getName())){
+                        continue;
+                    }
+                    //每个规则生成一个报告
+                    List<Report> reports = checker.check(tree);
+                    //输出
+                    appender.print(reports);
                 }
 
             }
-            log.info("sql==================="+sql);
+            log.info("------------------------");
+            log.info("sql ======> " + sql);
+            log.info("------------------------");
         }catch (Exception e){
             log.error("日志插入失败");
             e.printStackTrace();
