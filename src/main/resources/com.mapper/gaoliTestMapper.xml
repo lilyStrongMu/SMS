@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shf.spring.sms.mapper.GaoliTestMapper">
+    <resultMap id="gaoLiTest" type="com.shf.spring.sms.entity.GaoliTest">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="tel" column="tel"/>
+    </resultMap>
+
+    <resultMap id="selectLayer" type="java.util.Map">
+        <result property="classNO" column="classNO"/>
+        <result property="name" column="name"/>
+        <result property="capacity" column="capacity"/>
+        <result property="tableName" column="table_name"/>
+        <result property="courseName" column="courseName"/>
+    </resultMap>
+
+    <!--添加-->
+    <select id="selectAll" resultType= "com.shf.spring.sms.entity.GaoliTest">
+        select * from gaoli_test
+    </select>
+    <!--通过id查询-->
+    <select id="selectIndex2" resultType= "com.shf.spring.sms.entity.GaoliTest">
+        select name, sex from gaoli_test where id = 7 order by name
+    </select>
+
+    <select id="selectIndex1"  resultType= "com.shf.spring.sms.entity.GaoliTest">
+        select name, sex from gaoli_test where id = 7 order by name,sex
+    </select>
+
+    <select id="selectLayer1" resultMap="selectLayer">
+        select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e
+    </select>
+
+    <delete id="deleteWhere">
+        delete from gaoli_test where id > 1
+    </delete>
+
+</mapper>

@@ -2,19 +2,35 @@ package com.shf.spring.sms.task.ASTNode;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.*;
 
 import java.util.List;
 
 public class JSqlParseAst implements AST{
-    @Override
-    public SqlTypes getSqlType() {
-        return null;
+
+    private Statement statement;
+    private String sql;
+
+    public JSqlParseAst(Statement statement, String sql) {
+        this.statement = statement;
+        this.sql = sql;
     }
 
     @Override
-    public String getSql() {
-        return null;
+    public SqlTypes getSqlType() {
+        if (statement instanceof Select) {
+            return SqlTypes.SELECT;
+        }
+        else {
+            return null;
+        }
+    }
+
+    @Override
+    public String getSql()
+    {
+        return this.sql;
     }
 
     @Override
@@ -29,8 +45,25 @@ public class JSqlParseAst implements AST{
 
     @Override
     public List<SelectItem> getSelects() {
-        return null;
+        switch (this.getSqlType()) {
+            case SELECT:
+                Select select = (Select) statement;
+                return ((PlainSelect) select.getSelectBody()).getSelectItems();
+            default:
+                return null;
+        }
     }
+
+//    @Override
+//    public List<SelectItem> nest_getSelects() {
+//        switch (this.getSqlType()) {
+//            case SELECT:
+//                Select select = (Select) statement;
+//                return ((PlainSelect) select.getSelectBody()).getSelectItems();
+//            default:
+//                return null;
+//        }
+//    }
 
     @Override
     public List<Column> getColumns() {
@@ -39,7 +72,14 @@ public class JSqlParseAst implements AST{
 
     @Override
     public List<Join> getJoins() {
-        return null;
+        switch (this.getSqlType()) {
+            case SELECT:
+                Select select = (Select) statement;
+                return ((PlainSelect) select.getSelectBody()).getJoins();
+            default:
+                return null;
+        }
+
     }
 
     @Override
