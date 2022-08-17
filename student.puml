@@ -1,0 +1,111 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+abstract Checker
+interface Analyzer
+interface AST
+interface CheckRule
+interface Appender
+class DefaultAppender
+class Report
+class CheckerHolder
+enum Level
+
+Level "1" <.o "1" Report : 聚合
+AST  <..  Analyzer
+CheckRule "n" <.o "1" Checker : 聚合
+CheckerHolder  ..>  Checker
+Appender ..> Report
+
+'SQL语法分析器
+interface Analyzer{
+AST analyze(String sql);
+}
+
+'抽象语法树，用来获取SQL的各个部分
+interface AST{
+    SqlTypes getSqlType();
+    String getSql();
+    Expression getWhere();
+    GroupByElement getGroupBy();
+    List<SelectItem> getSelects();
+    List<Column> getColumns();
+    List<Join> getJoins();
+    Limit getLimit();
+    List<OrderByElement> getOrderByElement();
+    List<fromItem> getFromItem();
+}
+
+'抽象类，所有规则检查器的基类，check()方法用来遍历规则集并检查
+abstract Checker{
+     public abstract String getName();
+     protected List<CheckRule> rules;
+     public void registeRule(CheckRule rule)
+     public List<Report> check(AST tree)
+}
+
+'具体的检查规则，每个规则器里有多个检查规则，如select类型的SQL语句会有多个检查规则
+interface CheckRule {
+    Report match(AST tree);
+    List<SqlTypes> scope();
+}
+
+'检查报告，每条规则检查后都会生成一条报告
+class Report {
+    private boolean pass;
+    private String desc;
+    private String sql;
+    private Level level;
+    private String sample;
+
+}
+'检查报告中使用的枚举
+enum Level {
+    WARNING("wanring")
+    ERROR("error")
+    INFO("info")
+}
+
+
+
+'用于输出报告，可以定义不同的实现类，输出不同的样式
+interface Appender {
+    void print(List<Report> reports);
+}
+
+'用来注册Checker，所有的Checker都必须注册在CheckerHolder才能生效
+class CheckerHolder {
+    ' CocurrentHashMap
+    private static Map<String,Checker> checkers;
+    public static void registeChecker(Checker checker)
+    public static void unRegisteChecker(Checker checker)
+    public static  Map<String,Checker> getCheckers()
+}
+note top of CheckerHolder : 所有的Checker都必须注册在CheckerHolder才能生效
+
+'语法树的实现JSqlParseAst, 模板中重点检查SELECT类型的语句，因此其他类型的实现暂时为null
+class JSqlParseAst implements AST {
+    private Statement statement;
+    private String sql;
+}
+
+'解析器的实现JSqlParseAnalyzer
+class JSqlParseAnalyzer implements Analyzer {
+}
+
+'Checker的实现比较简单，因为大部分逻辑都已包含在基类中，子类只需要提供一个name即可，用来标识Checker的类型。SelectChecker实现如下：
+class SelectChecker extends Checker {
+}
+note bottom of  SelectChecker: 返回的name只能为增查改删
+'CheckRule的一个具体实现WriteClearlySelectFieldRule，检查SQL中不能出现SELECT *
+class WriteClearlySelectFieldRule implements CheckRule {
+}
+
+'Appender的实现类，DefaultAppender，默认往控制台输出报告
+class DefaultAppender implements Appender {
+}
+
+
+
+@enduml

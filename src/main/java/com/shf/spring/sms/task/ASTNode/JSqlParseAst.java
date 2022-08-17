@@ -251,7 +251,7 @@ public class JSqlParseAst implements AST{
         return map;
     }
 
-    private static Map test_select_subselect(SelectBody selectBody){
+    public static Map test_select_subselect(SelectBody selectBody){
         Map<String, String> map = new HashMap<String, String>();
 
         if (selectBody instanceof PlainSelect) {
