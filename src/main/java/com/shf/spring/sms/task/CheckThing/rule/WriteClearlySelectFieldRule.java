@@ -79,6 +79,7 @@ public class WriteClearlySelectFieldRule implements CheckRule {
 //                report.setDesc("请写明查询字段，不要使用select *");
 //11
                 report.setPass(false);
+                report.setDesc("请写明查询字段，不要使用select *");
                 report.setLevel(Report.Level.ERROR);
                 return report;
             }
@@ -89,6 +90,7 @@ public class WriteClearlySelectFieldRule implements CheckRule {
 //            report.setDesc("请写明查询字段，不要使用select *");
 // 1
             report.setPass(false);
+            report.setDesc("请写明查询字段，不要使用select *");
             report.setLevel(Report.Level.ERROR);
             return report;
         }
@@ -120,6 +122,7 @@ public class WriteClearlySelectFieldRule implements CheckRule {
                         report.setDesc("请写明查询字段，不要使用select *");
                         report.setPass(false);
                         report.setLevel(Report.Level.ERROR);
+
                         return report;
                     }
                 }

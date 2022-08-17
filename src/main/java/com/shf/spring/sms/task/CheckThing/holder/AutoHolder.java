@@ -10,7 +10,6 @@ import java.util.ServiceLoader;
 
 public class AutoHolder {
     static {
-        System.out.println("I am AutoHolder");
         ServiceLoader<Checker> checkers = ServiceLoader.load(Checker.class);
         for (Checker checker : checkers) {
             CheckerHolder.registeChecker(checker);

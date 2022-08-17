@@ -48,6 +48,9 @@ public class SqlTestController {
             if(type == 0){
                 if(two == 0){
                     GaoliTest temp= mapper.selectById(2);
+                    if(temp == null){
+                        return;
+                    }
                     log.info(temp.toString());
                 }else if(two == 1){
                     List<GaoliTest> temp = mapper.selectAll();
@@ -60,6 +63,9 @@ public class SqlTestController {
                     temp = mapper.selectIndex1();
                 }else{
                     temp = mapper.selectIndex2();
+                }
+                if(temp == null){
+                    return;
                 }
                 log.info(temp.toString());
             }

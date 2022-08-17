@@ -77,7 +77,7 @@ public class MybatisSelectInceptor implements Interceptor {
                 Appender appender = new DefaultAppender();
                 //遍历规则检查器，开始检查
                 for (Checker checker : CheckerHolder.getCheckers().values()){
-                    if(!"select".equals(checker.getName())){
+                    if(!"SELECT".equals(checker.getName())){
                         continue;
                     }
                     //每个规则生成一个报告
@@ -85,7 +85,6 @@ public class MybatisSelectInceptor implements Interceptor {
                     //输出
                     appender.print(reports);
                 }
-
             }
             log.info("------------------------");
             log.info("sql ======> " + sql);
