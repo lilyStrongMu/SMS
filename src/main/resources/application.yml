@@ -20,6 +20,11 @@ spring:
     mode: HTML5
     servlet:
       content-type: text/html
+  data:
+    neo4j:
+      password: neo4j2
+      uri: bolt://localhost:7687
+      username: neo4j
 
 mybatis-plus:
   configuration:
