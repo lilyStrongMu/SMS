@@ -37,6 +37,7 @@ public class JoinAnalysis implements CheckSql {
                 //String rightTableField = rightExpression.getColumnName();//A as a left join B on a.bid = B.id 中的id
                 /*String joinType=join.toString();
                 getJoinWeight(joinType,leftTableName,rightTableName);*/
+
                 int weight=getJoinWeight(join);
                 if(weight==0){
                     System.out.println("非内联、左右外联和全外联类型的join语句，该语句暂不参与权重更新，如需要可进行功能扩展");
