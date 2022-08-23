@@ -35,8 +35,7 @@ public class JoinAnalysis implements CheckSql {
                 //String leftTableField = leftExpression.getColumnName();//A as a left join B on a.bid = B.id 中的bid
                 String rightTableName = String.valueOf(rightExpression.getTable());//A as a left join B on a.bid = B.id 中的B
                 //String rightTableField = rightExpression.getColumnName();//A as a left join B on a.bid = B.id 中的id
-                /*String joinType=join.toString();
-                getJoinWeight(joinType,leftTableName,rightTableName);*/
+
                 int weight=getJoinWeight(join);
 
                 if(weight==0){
