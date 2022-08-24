@@ -19,19 +19,12 @@ public class JoinAnalysis implements CheckSql {
     public Set<CheckNode> getNewWeight(List<String> Sql) {
         Set<CheckNode> checkNodeSet=new HashSet<>();
         Map<String,String> tableAliasMap = new HashMap<>();
-//        @Test
-//        public void listString() {
-//            List<String> list = new ArrayList<>();
-//            list.add("11");
-//            list.add("22");
-//            System.out.println("List :" + JSON.toJSONString(list));
-//            System.out.println("String :" + StringUtils.join(list.toArray(), ","));
-//        }
-        String sql =String.join(" ",Sql);
 
-        //String sql ="select * from A as a left join B AS b on a.bid = b.id inner join C AS c on A.cid = c.id right join Dd AS dd on B.did = dd.id";
-        //String sql ="select *from A as a left join B on a.bid = B.id left join C on A.cid = C.id left join D on B.did = D.id";
-        System.out.println("sql语句："+sql);
+        String sql =String.join(" ",Sql);
+//        //测试数据
+//        String sql ="select * from A as a left join B AS b on a.bid = b.id inner join C AS c on A.cid = c.id right join Dd AS dd on B.did = dd.id";
+//        String sql ="select *from A as a left join B on a.bid = B.id left join C on A.cid = C.id left join D on B.did = D.id";
+//        System.out.println("sql语句："+sql);
 
         try {
             Select select = (Select) CCJSqlParserUtil.parse(sql);
@@ -51,12 +44,7 @@ public class JoinAnalysis implements CheckSql {
                 if(joinTable.getAlias().getName() != null){
                     tableAliasMap.put(joinTable.getAlias().getName(),joinTable.getName());
                 }
-
-                //String rightTableName = String.valueOf(rightTable.getName());//原始表名
-                //String leftTableName=rightTableName;
-                //Collection<Expression> Collection = join.getOnExpressions();
-
-                //System.out.println("join.getOnExpressions():"+join.getOnExpressions().iterator().next());
+                //读取on语句并解析表名
                 EqualsTo equalsTo = (EqualsTo) join.getOnExpressions().iterator().next();
                 System.out.println("equalsTo:"+equalsTo);
                 Column rightExpression = (Column) equalsTo.getRightExpression();
@@ -73,11 +61,11 @@ public class JoinAnalysis implements CheckSql {
                 if(tableAliasMap.containsKey(rightTableName)){
                     rightTableName=tableAliasMap.get(rightTableName);
                 }
-                String rightTableField = rightExpression.getColumnName();//A as a left join B on a.bid = B.id 中的id
+                //String rightTableField = rightExpression.getColumnName();//A as a left join B on a.bid = B.id 中的id
 
                 System.out.println("leftTableName:"+leftTableName);
                 System.out.println("rightTableName:"+rightTableName);
-
+                //更新权重
                 int weight=getJoinWeight(join);
                 System.out.println("weight:"+weight);
                 if(weight==0){
@@ -112,36 +100,3 @@ public class JoinAnalysis implements CheckSql {
         }
     }
 }
-
-/*
-    // 获取表及对应的别名
-    public void testParseAlias(){
-        Map<String,String> map = new HashMap<>();
-        String sql = "select *from A as a left join B b on a.bid = B.id left join C on A.cid = C.id and A.m = 3 left join D on B.did = D.id where a.id = 23 or b.id = 34 or c.id = 54";
-        try {
-            Select select = (Select)CCJSqlParserUtil.parse(sql);
-            SelectBody selectBody = select.getSelectBody();
-            PlainSelect plainSelect = (PlainSelect)selectBody;
-            Table table = (Table)plainSelect.getFromItem();
-            if(table.getAlias() != null){
-                map.put(table.getAlias().getName(),table.getName());
-            }
-
-            for(Join join : plainSelect.getJoins()){
-                Table table1 = (Table)join.getRightItem();
-                if(table1.getAlias()!=null){
-                    map.put(table1.getAlias().getName(),table1.getName());
-                }
-            }
-            System.out.println(map);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
- */
-//                FromItem rightItem = join.getRightItem();
-//                FromItem leftItem = join.getLeftItem();
-//                Table rightTable=(Table)rightItem;
-//                Table leftTable=(Table)leftItem;
-//                String rightTableName = String.valueOf(rightTable.getName());
-//                String leftTableName = String.valueOf(leftTable.getName());
