@@ -80,7 +80,6 @@ public class Neo4jHandler {
     public void deleteAllData() {
         log.info("clear all data in neo4j");
         try {
-            init();
             session.run("match (n) detach delete (n)");
         } finally {
             close();
