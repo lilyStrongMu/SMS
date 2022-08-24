@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.thymeleaf.data.neo4j",
+      "type": "java.lang.String",
+      "description": "Description for spring.thymeleaf.data.neo4j."
+  }
+] }
