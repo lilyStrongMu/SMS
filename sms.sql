@@ -1,20 +1,19 @@
 /*
- Navicat Premium Data Transfer
+ Navicat MySQL Data Transfer
 
- Source Server         : localhost_3306
+ Source Server         : mine
  Source Server Type    : MySQL
- Source Server Version : 50736
+ Source Server Version : 50734
  Source Host           : localhost:3306
  Source Schema         : sms
 
  Target Server Type    : MySQL
- Target Server Version : 50736
+ Target Server Version : 50734
  File Encoding         : 65001
 
- Date: 17/12/2021 09:22:33
+ Date: 17/08/2022 16:32:57
 */
-CREATE DATABASE sms;
-USE sms;
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -34,7 +33,6 @@ CREATE TABLE `class`  (
 -- ----------------------------
 -- Records of class
 -- ----------------------------
-INSERT INTO `class` VALUES (1, 14, 60, '2021-09-01', 18);
 INSERT INTO `class` VALUES (2, 14, 56, '2021-09-01', 18);
 INSERT INTO `class` VALUES (322, 3, 34545, '2021-12-04', 17);
 INSERT INTO `class` VALUES (755, 4, 63, '2021-04-01', 24);
@@ -206,6 +204,28 @@ INSERT INTO `faculty` VALUES (16, '建筑学院');
 INSERT INTO `faculty` VALUES (100, '神学院');
 
 -- ----------------------------
+-- Table structure for gaoli_test
+-- ----------------------------
+DROP TABLE IF EXISTS `gaoli_test`;
+CREATE TABLE `gaoli_test`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `sex` int(1) NULL DEFAULT NULL,
+  `birthday` date NULL DEFAULT NULL,
+  `tel` int(13) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `test_index`(`id`, `tel`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of gaoli_test
+-- ----------------------------
+INSERT INTO `gaoli_test` VALUES (5, 'xx', 2, '2022-08-01', 1234567);
+INSERT INTO `gaoli_test` VALUES (6, '122', 1, '2022-08-25', 2);
+INSERT INTO `gaoli_test` VALUES (7, 'g', 1, '2022-08-11', 1);
+INSERT INTO `gaoli_test` VALUES (8, 'g', 2, '2022-08-01', 233);
+
+-- ----------------------------
 -- Table structure for location
 -- ----------------------------
 DROP TABLE IF EXISTS `location`;
@@ -275,6 +295,92 @@ INSERT INTO `student` VALUES (221321, '刘燕敏  ', '1994-11-12', 14, 1, '湖�
 INSERT INTO `student` VALUES (221341, '罗林琳  ', '1995-01-30', 14, 1, '湖北省武汉市', '13437777777', NULL, 0);
 INSERT INTO `student` VALUES (221343, '王五1', '2021-12-01', 4, 2, '北京', '1343444444', '3232fgregre', 0);
 INSERT INTO `student` VALUES (1913012, '哇哈哈', '2021-12-03', 100, 1, '武汉职业技术学院', '1343333333', '武汉职业技术学院结业', 0);
+
+-- ----------------------------
+-- Table structure for sys_sql
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_sql`;
+CREATE TABLE `sys_sql`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `sql` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `type` int(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_sql
+-- ----------------------------
+INSERT INTO `sys_sql` VALUES (1, ': DELETE FROM gaoli_test WHERE id=4', 4);
+INSERT INTO `sys_sql` VALUES (2, ' DELETE FROM gaoli_test WHERE id=4', 4);
+INSERT INTO `sys_sql` VALUES (3, ' DELETE FROM gaoli_test WHERE id=5', 4);
+INSERT INTO `sys_sql` VALUES (4, ' DELETE FROM gaoli_test WHERE id=5', 4);
+INSERT INTO `sys_sql` VALUES (5, ' DELETE FROM gaoli_test WHERE id=5', 4);
+INSERT INTO `sys_sql` VALUES (6, ' DELETE FROM gaoli_test WHERE id=5', 4);
+INSERT INTO `sys_sql` VALUES (7, ' INSERT INTO gaoli_test  ( id,\nname,\nsex,\nbirthday,\ntel )  VALUES  ( 0,\n\'小红\',\n2,\n\'3918-08-01\',\n0 )', 1);
+INSERT INTO `sys_sql` VALUES (8, ' DELETE FROM gaoli_test WHERE id=1', 4);
+INSERT INTO `sys_sql` VALUES (9, ' DELETE FROM gaoli_test WHERE id=7', 4);
+INSERT INTO `sys_sql` VALUES (10, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 4);
+INSERT INTO `sys_sql` VALUES (11, ' DELETE FROM gaoli_test WHERE id=null', 4);
+INSERT INTO `sys_sql` VALUES (12, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (13, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (14, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (15, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (16, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (17, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (18, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (19, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (20, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (21, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (22, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (23, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (24, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (25, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (26, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (27, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (28, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (29, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (30, ' select * from gaoli_test', 2);
+INSERT INTO `sys_sql` VALUES (31, ' select * from gaoli_test', 2);
+INSERT INTO `sys_sql` VALUES (32, ' SELECT id,name,sex,birthday,tel FROM gaoli_test WHERE id=2 ', 2);
+INSERT INTO `sys_sql` VALUES (33, ' select name, sex from gaoli_test where id = 7 order by name,sex', 2);
+INSERT INTO `sys_sql` VALUES (34, ' select name, sex from gaoli_test where id = 7 order by name', 2);
+INSERT INTO `sys_sql` VALUES (35, ' select * from gaoli_test', 2);
+INSERT INTO `sys_sql` VALUES (36, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (37, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (38, ' SELECT id,name,sex,birthday,tel FROM gaoli_test WHERE id=2 ', 2);
+INSERT INTO `sys_sql` VALUES (39, ' select * from gaoli_test', 2);
+INSERT INTO `sys_sql` VALUES (40, ' select name, sex from gaoli_test where id = 7 order by name,sex', 2);
+INSERT INTO `sys_sql` VALUES (41, ' DELETE FROM gaoli_test WHERE id=7', 4);
+INSERT INTO `sys_sql` VALUES (42, ' delete from gaoli_test where id > 1', 4);
+INSERT INTO `sys_sql` VALUES (43, ' select name, sex from gaoli_test where id = 7 order by name', 2);
+INSERT INTO `sys_sql` VALUES (44, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (45, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (46, ' SELECT id,name,sex,birthday,tel FROM gaoli_test WHERE id=2 ', 2);
+INSERT INTO `sys_sql` VALUES (47, ' select * from gaoli_test', 2);
+INSERT INTO `sys_sql` VALUES (48, ' select name, sex from gaoli_test where id = 7 order by name,sex', 2);
+INSERT INTO `sys_sql` VALUES (49, ' select name, sex from gaoli_test where id = 7 order by name', 2);
+INSERT INTO `sys_sql` VALUES (50, ' select a.classNO , b.`name`, c.capacity, t.table_name, e.courseName from class a, teacher b, classroom c, table_index t, course e', 2);
+INSERT INTO `sys_sql` VALUES (51, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (52, ' SELECT  id,username,password,type,disabled,contrastStudentID,contrastTeacherID  FROM user \n \n WHERE (username = \'shf\')', 2);
+INSERT INTO `sys_sql` VALUES (53, ' SELECT id,name,sex,birthday,tel FROM gaoli_test WHERE id=2 ', 2);
+INSERT INTO `sys_sql` VALUES (54, ' select * from gaoli_test', 2);
+
+-- ----------------------------
+-- Table structure for table_index
+-- ----------------------------
+DROP TABLE IF EXISTS `table_index`;
+CREATE TABLE `table_index`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `table_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `index_column_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of table_index
+-- ----------------------------
+INSERT INTO `table_index` VALUES (1, 'gaoli_test', 'id');
+INSERT INTO `table_index` VALUES (2, 'gaoli_test', 'name,sex');
 
 -- ----------------------------
 -- Table structure for teacher
