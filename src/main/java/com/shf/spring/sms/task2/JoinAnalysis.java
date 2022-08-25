@@ -19,12 +19,11 @@ public class JoinAnalysis implements CheckSql {
     public Set<CheckNode> getNewWeight(List<String> Sql) {
         Set<CheckNode> checkNodeSet=new HashSet<>();
         Map<String,String> tableAliasMap = new HashMap<>();
+        Set<String> curTable_count = new HashSet<>();
 
-        String sql =String.join(" ",Sql);
-//        //测试数据
-//        String sql ="select * from A as a left join B AS b on a.bid = b.id inner join C AS c on A.cid = c.id right join Dd AS dd on B.did = dd.id";
-//        String sql ="select *from A as a left join B on a.bid = B.id left join C on A.cid = C.id left join D on B.did = D.id";
-//        System.out.println("sql语句："+sql);
+        String sql =Sql.get(0).split(":")[1];
+        String[] curTable_Theor=Sql.get(1).split(":")[1].split(",");
+        System.out.println("sql:"+sql);
 
         try {
             Select select = (Select) CCJSqlParserUtil.parse(sql);
@@ -32,42 +31,35 @@ public class JoinAnalysis implements CheckSql {
             PlainSelect plainSelect = (PlainSelect) selectBody;
             //获取表名-表别名
             Table table = (Table)plainSelect.getFromItem();
-            if(table.getAlias().getName() != null){
+            curTable_count.add(table.getName());
+            if(table.getAlias()!= null){
                 tableAliasMap.put(table.getAlias().getName(),table.getName());
             }
 
             List<Join> joins = plainSelect.getJoins();
             for (Join join : joins) {
-                System.out.println("join语句:"+join);
                 //获取表名-表别名
                 Table joinTable=(Table)join.getRightItem();
-                if(joinTable.getAlias().getName() != null){
+                curTable_count.add(joinTable.getName());
+                if(joinTable.getAlias() != null){
                     tableAliasMap.put(joinTable.getAlias().getName(),joinTable.getName());
                 }
                 //读取on语句并解析表名
                 EqualsTo equalsTo = (EqualsTo) join.getOnExpressions().iterator().next();
-                System.out.println("equalsTo:"+equalsTo);
                 Column rightExpression = (Column) equalsTo.getRightExpression();
-                System.out.println("rightExpression:"+rightExpression);
                 Column leftExpression = (Column) equalsTo.getLeftExpression();
-                System.out.println("leftExpression:"+leftExpression);
 
-                String leftTableName = String.valueOf(leftExpression.getTable());//A as a left join B on a.bid = B.id 中的a
+                String leftTableName = String.valueOf(leftExpression.getTable());
                 if(tableAliasMap.containsKey(leftTableName)){
                     leftTableName=tableAliasMap.get(leftTableName);
                 }
                 //String leftTableField = leftExpression.getColumnName();//A as a left join B on a.bid = B.id 中的bid
-                String rightTableName = String.valueOf(rightExpression.getTable());//A as a left join B on a.bid = B.id 中的B
+                String rightTableName = String.valueOf(rightExpression.getTable());
                 if(tableAliasMap.containsKey(rightTableName)){
                     rightTableName=tableAliasMap.get(rightTableName);
                 }
-                //String rightTableField = rightExpression.getColumnName();//A as a left join B on a.bid = B.id 中的id
-
-                System.out.println("leftTableName:"+leftTableName);
-                System.out.println("rightTableName:"+rightTableName);
                 //更新权重
                 int weight=getJoinWeight(join);
-                System.out.println("weight:"+weight);
                 if(weight==0){
                     System.out.println("非内联、左右外联和全外联类型的join语句，该语句暂不参与权重更新，如需要可进行功能扩展");
                 }else{
@@ -81,9 +73,22 @@ public class JoinAnalysis implements CheckSql {
                     }else
                         checkNodeSet.add(node);
                 }
+                //该过程中步骤、结果打印
+                System.out.println("join:"+join);
+                System.out.println("equalsTo:"+equalsTo);
+                System.out.println("rightExpression:"+rightExpression);
+                System.out.println("leftExpression:"+leftExpression);
+                System.out.println("leftTableName:"+leftTableName);
+                System.out.println("rightTableName:"+rightTableName);
+                System.out.println("weight:"+weight);
+                System.out.println(" ");
 
             }
-            System.out.println("表别名&表名"+tableAliasMap);
+            //table结果打印
+            System.out.println("curTable_Theor"+ Arrays.toString(curTable_Theor));
+            System.out.println("curTable_count"+curTable_count);
+            System.out.println("tableAliasName&tableName"+tableAliasMap);
+
         } catch (JSQLParserException e) {
             throw new RuntimeException(e);
         }
