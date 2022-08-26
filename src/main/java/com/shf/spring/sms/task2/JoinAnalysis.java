@@ -161,6 +161,4 @@ public class JoinAnalysis implements CheckSql {
         }
         return checkNodeSet;
     }
-
-
 }
