@@ -28,7 +28,7 @@ public class CheckNode implements Comparable<CheckNode>{
         return new Builder();
     }
 
-    public static class Builder {
+    public static final class Builder {
         private String name1;
         private String name2;
         private int weight;

@@ -52,6 +52,7 @@ public class GetDataFromNode4j {
                 edges.add(edge);
             }
         }
+        neo4jHandler.close();
         return Graph.builder()
                 .nodes(nodes)
                 .edges(edges)
