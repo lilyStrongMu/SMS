@@ -18,6 +18,40 @@ public class CheckNode implements Comparable<CheckNode>{
         this.weight = weight;
     }
 
+    public CheckNode(Builder builder) {
+        this.name1 = builder.name1;
+        this.name2 = builder.name2;
+        this.weight = builder.weight;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String name1;
+        private String name2;
+        private int weight;
+
+        public Builder name1(String val) {
+            name1 = val;
+            return this;
+        }
+
+        public Builder name2(String val) {
+            name2 = val;
+            return this;
+        }
+
+        public Builder weight(int val) {
+            weight = val;
+            return this;
+        }
+
+        public CheckNode build() {
+            return new CheckNode(this);
+        }
+    }
 
     @Override
     public int compareTo(CheckNode o) {

@@ -23,6 +23,10 @@ public class Neo4jHandler {
         session = driver.session();
     }
 
+    public Result runCypher(String cypher) {
+        return session.run(cypher);
+    }
+
     public Neo4jHandler createTableNode(String name) {
         String cypher = "merge (n:tableNode {name: '" + name + "'});";
         List<String> cyphers = threadLocal.get();
