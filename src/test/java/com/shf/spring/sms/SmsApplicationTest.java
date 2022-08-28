@@ -1,5 +1,6 @@
 package com.shf.spring.sms;
 
+import com.shf.spring.sms.entity.neo4j.Graph;
 import com.shf.spring.sms.handler.Neo4jHandler;
 import com.shf.spring.sms.mapper.GaoliTestMapper;
 import com.shf.spring.sms.task.ASTNode.AST;
@@ -9,6 +10,7 @@ import com.shf.spring.sms.task.ASTNode.JSqlParseAst;
 import com.shf.spring.sms.task.CheckThing.rule.CheckRule;
 import com.shf.spring.sms.task.CheckThing.rule.NestLayerCheck_v2;
 import com.shf.spring.sms.task.PrintResult.Report;
+import com.shf.spring.sms.task2.GetDataFromNode4j;
 import com.shf.spring.sms.task2.InputAdpter;
 import com.shf.spring.sms.task2.SaveInGraphDataBase;
 import org.junit.jupiter.api.Test;
@@ -60,5 +62,12 @@ class SmsApplicationTest {
         // 查看所有的节点  `match (n) return n`
         Neo4jHandler neo4jHandler = new Neo4jHandler();
         neo4jHandler.deleteAllData();
+    }
+
+    @Test
+    public void testGetNeo4jData() {
+        GetDataFromNode4j getDataFromNode4j = new GetDataFromNode4j();
+        Graph neo4jData = getDataFromNode4j.getNeo4jData();
+        System.out.println(neo4jData);
     }
 }
