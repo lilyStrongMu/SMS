@@ -43,10 +43,10 @@ public class Neo4jHandler {
     }
 
     public Set<Integer> findWeightByNode(String nodeName1, String nodeName2) {
-//        String cypher = "match (a:tableNode)-[r:weight]->(b:tableNode) where a.name='"
-//                + nodeName1 + "' and b.name='" + nodeName2 + "' return r.weight as weight";
+        String cypher = "match (a:tableNode)-[r:weight]->(b:tableNode) where a.name='"
+                + nodeName1 + "' and b.name='" + nodeName2 + "' return r.weight as weight";
         Set<Integer> set = new HashSet<>();
-        String cypher = "match (n) return n";
+
         Result result = session.run(cypher);
         while (result.hasNext()) {
             Record record = result.next();
