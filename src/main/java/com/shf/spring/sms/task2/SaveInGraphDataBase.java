@@ -14,7 +14,6 @@ public class SaveInGraphDataBase {
         this.layerAnalyzer = new Layer(map);
     }
 
-
     public void saveData(){
         List<CheckNode> list = layerAnalyzer.getLast();
         Neo4jHandler neo4jHandler = new Neo4jHandler();

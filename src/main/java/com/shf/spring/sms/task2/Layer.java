@@ -20,7 +20,7 @@ public class Layer {
 
     public Layer(TreeMap<String, List<String>> map) {
         this.map = map;
-        this.join = new Join();
+        this.join = new JoinAnalysis();
         this.re = new Relationship();
         this.inCheck = new InCheck();
     }
@@ -36,6 +36,9 @@ public class Layer {
         Map<Integer, Boolean> funMap = new HashMap<>();
         Map<CheckNode, Integer> finalMap = new HashMap<>();
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+            checkJoin.clear();
+            checkRe.clear();
+            checkIn.clear();
             String key = entry.getKey();
             List<String> value = entry.getValue();
             String curTable = value.get(1).split(":")[1];
@@ -43,12 +46,10 @@ public class Layer {
             assert join != null;
             if (value.get(0).contains("join") || value.get(0).contains("JOIN")) {
                 checkJoin = join.getNewWeight(value);
-                if (CollectionUtils.isEmpty(checkRe)){
-                    throw new RuntimeException("checkRe 为空");
+                if (CollectionUtils.isEmpty(checkJoin)){
+                    throw new RuntimeException("checkJoin 为空");
                 }
-            }
-            assert re != null;
-            if (value.get(0).contains(">") || value.get(0).contains("<") || value.get(0).contains("=")
+            }else if (value.get(0).contains(">") || value.get(0).contains("<") || value.get(0).contains("=")
                     || value.get(0).contains("<=") || value.get(0).contains(">=")) {
                 checkRe = re.getNewWeight(value);
                 if (CollectionUtils.isEmpty(checkRe)){
@@ -56,7 +57,7 @@ public class Layer {
                 }
 
             }
-            if (value.get(0).contains("in") || value.get(0).contains("IN")) {
+            if (value.size() == 4) {
                 checkIn = inCheck.getNewWeight(value);
                 if (CollectionUtils.isEmpty(checkIn)){
                     throw new RuntimeException("checkIn 为空");
@@ -91,31 +92,34 @@ public class Layer {
                 for(Map.Entry<CheckNode, Integer> entry2: temp.entrySet()){
                     CheckNode node = entry2.getKey();
                     int w = node.getWeight();
-                    if(curTable.contains(node.getName1())){
-                        if(record.containsKey(node.getName2())){
-                            int preLayer = record.get(node.getName2());
-                            for(int i = preLayer; i < curL; i++){
-                                if(funMap.get(i)){
-                                    w -= 7;
-                                }else{
-                                    w -= 5;
+                    String[] curTables = curTable.split(",");
+                    for(int j = 0; j < curTables.length; j++){
+                        if(curTables[j].trim().equals(node.getName1().trim())){
+                            if(record.containsKey(node.getName2())){
+                                int preLayer = record.get(node.getName2());
+                                for(int i = preLayer; i < curL; i++){
+                                    if(funMap.get(i)){
+                                        w -= 7;
+                                    }else{
+                                        w -= 5;
+                                    }
                                 }
+                                node.setWeight(w);
+                                temp.put(node, w);
                             }
-                            node.setWeight(w);
-                            temp.put(node, w);
-                        }
-                    }else if(curTable.contains(node.getName2())){
-                        if(record.containsKey(node.getName1())){
-                            int preLayer = record.get(node.getName1());
-                            for(int i = preLayer; i < curL; i++){
-                                if(funMap.get(i)){
-                                    w -= 7;
-                                }else{
-                                    w -= 5;
+                        }else if(curTables[j].trim().equals(node.getName2().trim())){
+                            if(record.containsKey(node.getName1())){
+                                int preLayer = record.get(node.getName1());
+                                for(int i = preLayer; i < curL; i++){
+                                    if(funMap.get(i)){
+                                        w -= 7;
+                                    }else{
+                                        w -= 5;
+                                    }
                                 }
+                                node.setWeight(w);
+                                temp.put(node, w);
                             }
-                            node.setWeight(w);
-                            temp.put(node, w);
                         }
                     }
 
@@ -123,6 +127,7 @@ public class Layer {
             }
             for (CheckNode t : Optional.ofNullable(checkIn).orElse(Collections.emptySet())) {
                 if(temp.containsKey(t) && temp.get(t) < t.getWeight()){
+                    temp.remove(t);
                     temp.put(t, t.getWeight());
                 }else if(!temp.containsKey(t)){
                     temp.put(t, t.getWeight());
@@ -144,7 +149,7 @@ public class Layer {
             for(String cName : curTableNames){
                 record.put(cName, curL);
             }
-            boolean flag = containsFunction(value.get(0));
+            boolean flag = containsFunction(value.get(0).split(":")[1]);
             if(funMap.containsKey(curL)){
                 if(flag){
                     funMap.put(curL, true);

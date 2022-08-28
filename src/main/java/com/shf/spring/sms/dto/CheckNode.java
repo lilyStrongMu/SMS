@@ -30,7 +30,7 @@ public class CheckNode implements Comparable<CheckNode>{
 
     @Override
     public int hashCode(){
-        return Objects.hash(name1, name2);
+        return Objects.hash(name1, name2) + Objects.hash(name2, name1);
     }
 
     @Override
