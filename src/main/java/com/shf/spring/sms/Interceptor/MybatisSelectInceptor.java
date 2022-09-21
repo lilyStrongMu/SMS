@@ -29,9 +29,11 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.ResultHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Proxy;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Intercepts({
@@ -75,7 +77,10 @@ public class MybatisSelectInceptor implements Interceptor {
                 AST tree = analyzer.analyze(sqlString);
                 AutoHolder holder = new AutoHolder();
                 Appender appender = new DefaultAppender();
+                StringBuilder sb = new StringBuilder();
                 //遍历规则检查器，开始检查
+                System.out.println("-----------start--------");
+                Long b = System.currentTimeMillis();
                 for (Checker checker : CheckerHolder.getCheckers().values()){
                     if(!"SELECT".equals(checker.getName())){
                         continue;
@@ -85,6 +90,8 @@ public class MybatisSelectInceptor implements Interceptor {
                     //输出
                     appender.print(reports);
                 }
+                log.info(" cost " + (System.currentTimeMillis() - b) + "ms");
+                System.out.println("--------------end-------------");
             }
             log.info("------------------------");
             log.info("sql ======> " + sql);

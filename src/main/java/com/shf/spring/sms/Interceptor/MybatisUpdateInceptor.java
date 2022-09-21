@@ -27,6 +27,7 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import java.lang.reflect.Proxy;
 import java.sql.Statement;
@@ -77,6 +78,8 @@ public class MybatisUpdateInceptor implements Interceptor {
                 AutoHolder holder = new AutoHolder();
                 Appender appender = new DefaultAppender();
                 //遍历规则检查器，开始检查
+                System.out.println("-----------start--------");
+                Long b = System.currentTimeMillis();
                 for (Checker checker : CheckerHolder.getCheckers().values()){
                     if("SELECT".equals(checker.getName())){
                         continue;
@@ -86,7 +89,8 @@ public class MybatisUpdateInceptor implements Interceptor {
                     //输出
                     appender.print(reports);
                 }
-
+                log.info(" cost:" + (System.currentTimeMillis() - b) + "ms");
+                System.out.println("--------------end-------------");
             }
             log.info("sql==================="+sql);
         }catch (Exception e){
