@@ -48,7 +48,7 @@ public class GetDataFromNode4j {
                 }
                 int source = nodeNameById.get(startNodeName);
                 int target = nodeNameById.get(endNodeName);
-                Graph.Edge edge = new Graph.Edge(source, target, String.valueOf(weight), weight);
+                Graph.Edge edge = new Graph.Edge(source, target, String.valueOf(weight), weight / 100d + 2);
                 edges.add(edge);
             }
         }

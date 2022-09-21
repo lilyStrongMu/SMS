@@ -35,7 +35,12 @@ public class DeleteWhereCheck implements CheckRule{
         }else{
             String sql = tree.getSql();
             String tableName = tree.getTable().get(0);
-            String indexSql = "select index_column_name from table_index where table_name = '"+tableName+"'";
+            String indexSql = "SELECT\n" +
+                    "\tINDEX_COLUMN \n" +
+                    "FROM\n" +
+                    "\t( SELECT TABLE_NAME, INDEX_NAME, GROUP_CONCAT( COLUMN_NAME ) AS INDEX_COLUMN FROM information_schema.statistics WHERE table_schema = 'sms' GROUP BY TABLE_NAME, INDEX_NAME ) t \n" +
+                    "WHERE\n" +
+                    "\tTABLE_NAME ='"+tableName+"'";
             List<String> index = jdbcTemplate.queryForList(indexSql, String.class);
             String countSql = "select count(%s) from %s";
             Integer count1 = jdbcTemplate.queryForObject(String.format(countSql, index.get(0), tableName), Integer.class);

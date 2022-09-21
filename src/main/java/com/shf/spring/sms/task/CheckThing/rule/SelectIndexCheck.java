@@ -32,7 +32,12 @@ public class SelectIndexCheck implements CheckRule{
             return report;
         }
         List<String[]> indexs = new ArrayList<>();
-        String sqlIndex = "select index_column_name from table_index where table_name = '%s'";
+        String sqlIndex = "SELECT\n" +
+                "\tINDEX_COLUMN \n" +
+                "FROM\n" +
+                "\t( SELECT TABLE_NAME, INDEX_NAME, GROUP_CONCAT( COLUMN_NAME ) AS INDEX_COLUMN FROM information_schema.statistics WHERE table_schema = 'sms' GROUP BY TABLE_NAME, INDEX_NAME ) t \n" +
+                "WHERE\n" +
+                "\tTABLE_NAME = '%s'";
         for(String name : names){
             String curSql = String.format(sqlIndex, name);
             List<String> curResult = jdbcTemplate.queryForList(curSql, String.class);

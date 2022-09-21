@@ -24,7 +24,7 @@ public class Graph {
         private Integer source;
         private Integer target;
         private String relation;
-        private Integer value;
+        private Double value;
     }
 
     private List<Vertex> nodes;
